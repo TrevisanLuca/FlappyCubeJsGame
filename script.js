@@ -1,5 +1,6 @@
 let myDiv = document.getElementById('myCube');
 let myContainer = document.getElementById('container');
+let myPointCounters = document.getElementById('points');
 
 let myDivPos = myDiv.getBoundingClientRect();
 myDiv.style.top = myDivPos.top;
@@ -15,6 +16,8 @@ let topmost = Number.parseInt(myContainer.style.top) + 1;
 let bottommost = Number.parseInt(myContainer.style.bottom) - myDivPos.height - 1;
 let leftmost = Number.parseInt(myContainer.style.left) + 1;
 let rightmost = Number.parseInt(myContainer.style.right) - myDivPos.width - 1;
+
+let pointsCounter = 0;
 
 document.onkeydown = checkKey;
 function random_0_100() {
@@ -45,16 +48,16 @@ function checkKey(e) {
             newPos = Number.parseInt(leftPos) + 10;
             myDiv.style.left = newPos > rightmost ? rightmost : newPos;
             break;
-        case 190:
-            //DOT .
-            moveObstacles();
+        //case 190:
+        //    //DOT .
+        //    moveObstacles();
         default:
     }
 }
 
 
 const obstaclesSpaceBetween = (myContainerPos.height * 0.25) < myDivPos.height ? myDivPos.height + 10 : (myContainerPos.height * 0.25);
-const obstaclesWidth = myContainerPos.width / 70;// myDivPos.width * 0.2;
+const obstaclesWidth = (myContainerPos.width - 2) / 70; //2 is the border width
 const obstaclesName = 'Obstacle';
 const obstaclesMinLength = myDivPos.height / 2;
 function generateObstacles() {
@@ -87,16 +90,39 @@ generateObstacles();
 function moveObstacles() {
     let obstaclesList = myContainer.getElementsByClassName(obstaclesName);
     let obsDeleteList = new Array();
-    for (var obstacle of obstaclesList) {
+    for (let obstacle of obstaclesList) {
         obstacle.style.left = Number.parseInt(obstacle.style.left) - obstaclesWidth;
-        if (Number.parseInt(obstacle.style.left) < leftmost) {
+        if (isTouching(obstacle, myDiv)) {
+            window.clearInterval(gameTimer);
+            alert("You lost");
+        }
+        if (Number.parseInt(obstacle.style.left) <= leftmost - 1) {
+            //can't delete obstacles during for cycle, has to put it into a secondary list
             obsDeleteList.push(obstacle);
         }
     }
     if (obsDeleteList.length > 0) {
-        for (var obstacleToDelete of obsDeleteList) {
+        for (let obstacleToDelete of obsDeleteList) {
             obstacleToDelete.parentNode.removeChild(obstacleToDelete);
         }
         generateObstacles();
     }
+    pointsCounter += 10;
+    myPointCounters.innerText = pointsCounter.toString();
+    if (pointsCounter === 350) { generateObstacles();}
 }
+
+function isTouching(obstacle, myDiv) {
+    let myDivPos = myDiv.getBoundingClientRect();
+    let myObstaclePos = obstacle.getBoundingClientRect();
+    if ((myObstaclePos.left > myDivPos.left && myObstaclePos.left < myDivPos.right)
+        || (myObstaclePos.right > myDivPos.left && myObstaclePos.right < myDivPos.right)) {
+        if ((myDivPos.top < myObstaclePos.bottom && myDivPos.top >= myObstaclePos.top)
+            || (myDivPos.bottom <= myObstaclePos.bottom && myDivPos.bottom > myObstaclePos.top)) {
+            return true;
+        }
+    }
+    return false;
+}
+
+let gameTimer = window.setInterval(moveObstacles, 100);

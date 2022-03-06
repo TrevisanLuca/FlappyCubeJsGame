@@ -1,0 +1,8 @@
+-----Generate obstacles
+-----move obstacles
+-----delete/teleport? obstacles
+-----check touching obstacles
+-----add timers
+-----add Points
+
+change from style.top to something numerical
