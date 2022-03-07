@@ -12,10 +12,10 @@ myContainer.style.bottom = myContainerPos.bottom;
 myContainer.style.left = myContainerPos.left;
 myContainer.style.right = myContainerPos.right;
 
-let topmost = Number.parseInt(myContainer.style.top) + 1;
-let bottommost = Number.parseInt(myContainer.style.bottom) - myDivPos.height - 1;
-let leftmost = Number.parseInt(myContainer.style.left) + 1;
-let rightmost = Number.parseInt(myContainer.style.right) - myDivPos.width - 1;
+let topmost = myContainerPos.top + 1;
+let bottommost = myContainerPos.bottom - myDivPos.height - 1;
+let leftmost = myContainerPos.left + 1;
+let rightmost = myContainerPos.right - myDivPos.width - 1;
 
 let pointsCounter = 0;
 
