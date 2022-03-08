@@ -4,12 +4,17 @@ export default function getSettings() {
             width: 700,
             height: 350,
             backgroundColor: 'lightgray',
-            border: '1px solid black'
+            border: '1px solid black',
+            id: 'container'
         },
         cube: {
             width: 50,
             height: 50,
-            backgroundColor: 'red'
+            backgroundColor: 'red',
+            moveSpeed : 10
+        },
+        game: {
+            genObsEvery : 350
         }
     }
     settings.obstacles = {

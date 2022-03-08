@@ -1,11 +1,11 @@
 import { startGame } from "../js/gamestates.js";
-import getSettings from '../js/GameSettings.js';
+import setup from "../js/setup.js";
 
 export class StartButton {
     constructor(settings) {
         this.settings = settings;
     }
-    static initialize(newButton) {
+    initialize() {
         let result = document.createElement('button');
         result.id = 'startButton';
         result.innerText = 'Start!';
@@ -13,20 +13,17 @@ export class StartButton {
         result.style.width = 76;
         result.style.height = 40;
         result.onclick = this.start;
+        result.settings = this.settings;
         return result;
     }
-    static start() {
+    start() {
         let myDiv = document.getElementById('myCube');
         let container = document.getElementById('container');
         let pointSpan = document.getElementById('points');
         let buttonContainer = document.getElementById('buttonContainer');
         let startButton = document.getElementById('startButton');
-        let settings = getSettings();
-        startButton.hidden = true;
+        this.hidden = true;
         buttonContainer.hidden = true;
-        startGame(settings, myDiv, container, pointSpan, buttonContainer, startButton);
-    }
-    static end() {
-
+        startGame(this.settings, myDiv, container, pointSpan, buttonContainer, startButton);
     }
 }

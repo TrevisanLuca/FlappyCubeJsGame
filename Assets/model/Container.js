@@ -4,15 +4,16 @@ export class Container {
         this.height = containerSettings.height;
         this.backgroundColor = containerSettings.backgroundColor;
         this.border = containerSettings.border;
+        this.id = containerSettings.id;
     }
-    static initialize(newContainer) {
+    initialize() {
         let result = document.createElement('div');
-        result.id = 'container';
+        result.id = this.id;
         result.position = 'relative';
-        result.style.width = newContainer.width;
-        result.style.height = newContainer.height;
-        result.style.backgroundColor = newContainer.backgroundColor;
-        result.style.border = newContainer.border;
+        result.style.width = this.width;
+        result.style.height = this.height;
+        result.style.backgroundColor = this.backgroundColor;
+        result.style.border = this.border;
         return result;
     }
     moveObstacles() {

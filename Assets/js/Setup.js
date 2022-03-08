@@ -7,10 +7,10 @@ export default function setup() {
     while (document.body.firstChild) document.body.removeChild(document.body.firstChild);
     let settings = getSettings();
         
-    let container = Container.initialize(new Container(settings.container));
+    let container = (new Container(settings.container)).initialize();
     document.body.appendChild(container);
 
-    let myDiv = Cube.initialize(new Cube(settings.cube));
+    let myDiv = (new Cube(settings)).initialize();
     container.appendChild(myDiv);
 
     let pointSpan = document.createElement('span');
@@ -25,7 +25,7 @@ export default function setup() {
     buttonContainer.style.alignItems = 'center';
     buttonContainer.style.margin = 0;
     buttonContainer.style.height = settings.container.height;
-    let startButton = StartButton.initialize(new StartButton(settings));
+    let startButton = (new StartButton(settings)).initialize();
     buttonContainer.appendChild(startButton);
     container.appendChild(buttonContainer);  
 }
