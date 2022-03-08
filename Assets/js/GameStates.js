@@ -1,5 +1,7 @@
 import setup from './Setup.js';
-export default function startGame(settings, cube, container, scoreboard, buttonContainer, startButton) {
+import { Obstacle } from "../model/obstacle.js";
+
+export function startGame(settings, cube, container, scoreboard, buttonContainer, startButton) {
 
     let cubePos = cube.getBoundingClientRect();
     cube.style.top = cubePos.top;
@@ -55,35 +57,36 @@ export default function startGame(settings, cube, container, scoreboard, buttonC
         }
     }
     function generateObstacles() {
-        let remainingSpace = settings.containerSettings.Height - settings.obstaclesSettings.SpaceBetween - 2 * settings.obstaclesSettings.MinLength;
-        let borderWidth = Number.parseInt(settings.containerSettings.Border);
-        let firstObsEnd = settings.obstaclesSettings.MinLength + remainingSpace * random_0_100();
-        let firstDiv = document.createElement('div');
-        firstDiv.className = settings.obstaclesSettings.Name;
-        firstDiv.style.backgroundColor = settings.obstaclesSettings.BackgroundColor;
-        firstDiv.style.width = settings.obstaclesSettings.Width;
-        firstDiv.style.height = firstObsEnd;
-        firstDiv.style.position = 'absolute';
-        firstDiv.style.top = topmost;
-        firstDiv.style.left = Number.parseInt(container.style.right) - settings.obstaclesSettings.Width - borderWidth;
+        let remainingSpace = settings.container.height - settings.obstacles.spaceBetween - 2 * settings.obstacles.minLength;
+        let borderWidth = Number.parseInt(settings.container.border);
+        let firstObsEnd = settings.obstacles.minLength + remainingSpace * random_0_100();
+        let firstDiv = Obstacle.initialize(new Obstacle(settings));
+        //let firstDiv = document.createElement('div');
+        //firstDiv.className = settings.obstacles.name;
+        //firstDiv.style.backgroundColor = settings.obstacles.backgroundColor;
+        //firstDiv.style.width = settings.obstacles.width;
+        //firstDiv.style.height = firstObsEnd;
+        //firstDiv.style.position = 'absolute';
+        //firstDiv.style.top = topmost;
+        //firstDiv.style.left = Number.parseInt(container.style.right) - settings.obstacles.width - borderWidth;
         container.appendChild(firstDiv);
 
         //returns start of second obstacle
         let secondDiv = document.createElement('div');
-        secondDiv.className = settings.obstaclesSettings.Name;
-        secondDiv.style.backgroundColor = settings.obstaclesSettings.BackgroundColor;
-        secondDiv.style.width = settings.obstaclesSettings.Width;
-        secondDiv.style.height = containerPos.height - firstObsEnd - settings.obstaclesSettings.SpaceBetween;
+        secondDiv.className = settings.obstacles.name;
+        secondDiv.style.backgroundColor = settings.obstacles.backgroundColor;
+        secondDiv.style.width = settings.obstacles.width;
+        secondDiv.style.height = containerPos.height - firstDiv.firstObsEnd - settings.obstacles.spaceBetween;
         secondDiv.style.position = 'absolute';
-        secondDiv.style.top = topmost + Number.parseInt(firstDiv.style.height) + settings.obstaclesSettings.SpaceBetween - borderWidth;
-        secondDiv.style.left = Number.parseInt(container.style.right) - settings.obstaclesSettings.Width - borderWidth;
+        secondDiv.style.top = topmost + Number.parseInt(firstDiv.style.height) + settings.obstacles.spaceBetween - borderWidth;
+        secondDiv.style.left = Number.parseInt(container.style.right) - settings.obstacles.width - borderWidth;
         container.appendChild(secondDiv);
     }
     function moveObstacles() {
-        let obstaclesList = container.getElementsByClassName(settings.obstaclesSettings.Name);
+        let obstaclesList = container.getElementsByClassName(settings.obstacles.name);
         let obsDeleteList = new Array();
         for (let obstacle of obstaclesList) {
-            obstacle.style.left = Number.parseInt(obstacle.style.left) - settings.obstaclesSettings.Width;
+            obstacle.style.left = Number.parseInt(obstacle.style.left) - settings.obstacles.width;
             if (isTouching(obstacle, cube)) {
                 endGame(gameTimer, buttonContainer, startButton);
             }

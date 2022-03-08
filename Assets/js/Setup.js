@@ -1,24 +1,16 @@
-import startGame from './GameStates.js';
-import getSettings from './Settings.js';
+import getSettings from './GameSettings.js';
+import { Container } from '../model/container.js'
+import { Cube } from "../model/cube.js";
+import { StartButton } from "../model/StartButton.js";
 
 export default function setup() {
     while (document.body.firstChild) document.body.removeChild(document.body.firstChild);
     let settings = getSettings();
-    let container = document.createElement('div');
-    container.id = 'container';
-    container.position = 'relative';
-    container.style.width = settings.containerSettings.Width;
-    container.style.height = settings.containerSettings.Height;
-    container.style.backgroundColor = settings.containerSettings.BackgroundColor;
-    container.style.border = settings.containerSettings.Border;
+        
+    let container = Container.initialize(new Container(settings.container));
     document.body.appendChild(container);
 
-    let myDiv = document.createElement('div');
-    myDiv.id = 'myCube';
-    myDiv.style.width = settings.cubeSettings.Width;
-    myDiv.style.height = settings.cubeSettings.Height;
-    myDiv.style.backgroundColor = settings.cubeSettings.BackgroundColor;
-    myDiv.style.position = 'absolute';
+    let myDiv = Cube.initialize(new Cube(settings.cube));
     container.appendChild(myDiv);
 
     let pointSpan = document.createElement('span');
@@ -32,19 +24,8 @@ export default function setup() {
     buttonContainer.style.justifyContent = 'center';
     buttonContainer.style.alignItems = 'center';
     buttonContainer.style.margin = 0;
-    buttonContainer.style.height = settings.containerSettings.Height;
-    let startButton = document.createElement('button');
-    startButton.id = 'startButton';
-    startButton.innerText = 'Start!';
-    startButton.style.width = 76;
-    startButton.style.height = 40;
-    startButton.onclick = start;
+    buttonContainer.style.height = settings.container.height;
+    let startButton = StartButton.initialize(new StartButton(settings));
     buttonContainer.appendChild(startButton);
-    container.appendChild(buttonContainer);
-
-    function start() {
-        startButton.hidden = true;
-        buttonContainer.hidden = true;
-        startGame(settings, myDiv, container, pointSpan, buttonContainer, startButton);
-    }
+    container.appendChild(buttonContainer);  
 }
