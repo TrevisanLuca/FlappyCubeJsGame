@@ -1,17 +1,15 @@
 import getSettings from './GameSettings.js';
-import { Container } from '../model/container.js'
-import { Cube } from "../model/cube.js";
+import { CONTAINER } from '../model/container.js'
+import { CUBE } from "../model/cube.js";
 import { StartButton } from "../model/StartButton.js";
 
-export default function setup() {
+export default function setup(firstGame) {
     while (document.body.firstChild) document.body.removeChild(document.body.firstChild);
     let settings = getSettings();
-        
-    let container = (new Container(settings.container)).initialize();
-    document.body.appendChild(container);
 
-    let myDiv = (new Cube(settings)).initialize();
-    container.appendChild(myDiv);
+    new CONTAINER(settings.container);
+
+    new CUBE(settings);
 
     let pointSpan = document.createElement('span');
     pointSpan.id = 'points';
@@ -27,5 +25,7 @@ export default function setup() {
     buttonContainer.style.height = settings.container.height;
     let startButton = (new StartButton(settings)).initialize();
     buttonContainer.appendChild(startButton);
-    container.appendChild(buttonContainer);  
+    document.getElementById(settings.container.id).appendChild(buttonContainer);
+
+    if (!firstGame) { startButton.click() };
 }

@@ -11,18 +11,24 @@ export default function getSettings() {
             width: 50,
             height: 50,
             backgroundColor: 'red',
-            moveSpeed : 10
-        },
-        game: {
-            genObsEvery : 350
+            moveSpeed: 15,
+            id: 'myCube'
         }
-    }
+    };
     settings.obstacles = {
         spaceBetween: (settings.container.height * 0.25) < settings.cube.height ? settings.cube.height + 10 : (settings.container.height * 0.25),
         width: settings.container.width / 70,
         name: 'Obstacle',
         minLength: settings.cube.height / 2,
-        backgroundColor: 'green'
-    }
+        backgroundColor: 'green',
+        moveSpeed: 2
+    };
+    settings.game = {
+        //round to nearest multiple of obstacles.moveSpeed
+        //genObsEvery: Math.round(settings.container.width / settings.obstacles.moveSpeed / settings.obstacles.moveSpeed) * settings.obstacles.moveSpeed,
+        genObsEvery: function () {
+            return Math.round(settings.container.width / settings.obstacles.moveSpeed);
+        } // settings.obstacles.moveSpeed) * settings.obstacles.moveSpeed; }
+    };
     return settings;
 }

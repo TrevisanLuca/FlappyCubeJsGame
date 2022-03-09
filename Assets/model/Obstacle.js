@@ -15,6 +15,10 @@ export class Obstacle {
         result.style.position = 'absolute';
         result.style.top = this.top;
         result.style.left = this.styleLeft;
+        result.obj = this;
         return result;
+    }
+    move(obstacle) {
+        obstacle.style.left = Number.parseInt(obstacle.style.left) - this.settings.obstacles.moveSpeed;
     }
 }

@@ -1,5 +1,5 @@
 import setup from './Setup.js';
 
 document.addEventListener("DOMContentLoaded", () => {
-    setup();
+    setup(true);
 });
