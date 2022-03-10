@@ -1,7 +1,40 @@
+import { Mover } from "../model/imovable.js";
+import getSettings from './GameSettings.js';
+import { CONTAINER } from '../model/container.js'
+import { CUBE } from "../model/cube.js";
+import { STARTBUTTON } from "../model/StartButton.js";
 import { generateObstacles } from "./ObstaclesGenerator.js";
+import { newGame } from "./main.js";
 
-export class GameStates {
-    static startGame(settings, cube, container, scoreboard, buttonContainer, startButton) {
+export class GameManager {    
+    setup(firstGame) {
+        while (document.body.firstChild) document.body.removeChild(document.body.firstChild);
+        let settings = getSettings();
+
+        new CONTAINER(settings.container);
+
+        new Mover(new CUBE(settings));
+
+        let pointSpan = document.createElement('span');
+        pointSpan.id = 'points';
+        pointSpan.innerText = '0 Points';
+        document.body.appendChild(pointSpan);
+
+        let buttonContainer = document.createElement('div');
+        buttonContainer.id = 'buttonContainer';
+        buttonContainer.style.display = 'flex';
+        buttonContainer.style.justifyContent = 'center';
+        buttonContainer.style.alignItems = 'center';
+        buttonContainer.style.margin = 0;
+        buttonContainer.style.height = settings.container.height;
+
+        new STARTBUTTON(settings, buttonContainer);
+
+        document.getElementById(settings.container.id).appendChild(buttonContainer);
+
+        if (!firstGame) { startButton.click() };//JS magic
+    }
+    startGame(settings, cube, container, scoreboard, buttonContainer, startButton) {
         //let cycles = 0;
         let leftmost = container.getBoundingClientRect().left + 1;
 
@@ -18,10 +51,11 @@ export class GameStates {
             let obsDeleteList = new Array();
             let continueGame = true;
             for (let obstacle of obstaclesList) {
-                obstacle.obj.move(obstacle);
-                obstacle.style.left = Number.parseInt(obstacle.style.left) - 1;//settings.obstacles.width;
+                obstacle.move
+                //obstacle.obj.move(obstacle);
+                //obstacle.style.left = Number.parseInt(obstacle.style.left) - 1;//settings.obstacles.width;
                 if (isTouching(obstacle, cube)) {
-                    GameStates.endGame(buttonContainer, startButton);
+                    newGame.endGame(buttonContainer, startButton);
                     continueGame = false;
                 }
                 if (Number.parseInt(obstacle.style.left) <= leftmost - 1) {
@@ -56,8 +90,7 @@ export class GameStates {
             return false;
         }
     }
-
-    static endGame(buttonContainer, startButton) {
+    endGame(buttonContainer, startButton) {
         document.onkeydown = undefined;
         buttonContainer.hidden = false;
         startButton.innerText = `You lost!

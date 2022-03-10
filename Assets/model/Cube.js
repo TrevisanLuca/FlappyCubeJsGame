@@ -1,3 +1,5 @@
+import { Mover } from "./imovable.js";
+
 export const CUBE = (function () {
     let result;
     return class Cube {
@@ -8,7 +10,9 @@ export const CUBE = (function () {
             this.containerBorder = Number.parseInt(settings.container.border);
             this.settings = settings;
             this.container = container;
-            this.initialize();
+            this.initialize();           
+            this.getLimits();
+            result.mover = new Mover(result, settings.cube.moveSpeed);
         }
         initialize() {
             result = document.createElement('div');
@@ -26,35 +30,36 @@ export const CUBE = (function () {
             result.style.top = Math.floor(container.getBoundingClientRect().bottom / 2 - this.settings.cube.height / 2);
             result.style.left = myDivPos.left;
         }
-        move(keyCode) {
-            let topPos = this.style.top;
-            let leftPos = this.style.left;
-            let newPos = 0;
+        getLimits() {
+            result.limits = {
+                topmost: 0,
+                leftmost: 0,
+                bottommost: 0,
+                rightmost: 0
+            }
             let containerPos = document.getElementById(this.settings.container.id).getBoundingClientRect();
+            result.limits.topmost = containerPos.top + this.containerBorder;
+            result.limits.bottommost = containerPos.bottom - this.height - this.containerBorder;
+            result.limits.leftmost = containerPos.left + this.containerBorder;
+            result.limits.rightmost = containerPos.right - this.width - this.containerBorder;
+        }
+        move(keyCode) {
             switch (keyCode) {
                 case 38:
                     //UP
-                    let topmost = containerPos.top + this.containerBorder;
-                    newPos = Number.parseInt(topPos) - this.settings.cube.moveSpeed;
-                    this.style.top = newPos < topmost ? topmost : newPos;
+                    this.mover.moveUp();
                     break;
                 case 40:
                     //DOWN
-                    let bottommost = containerPos.bottom - this.height - this.containerBorder;
-                    newPos = Number.parseInt(topPos) + this.settings.cube.moveSpeed;
-                    this.style.top = newPos > bottommost ? bottommost : newPos;
+                    this.mover.moveDown();
                     break;
                 case 37:
                     //LEFT
-                    let leftmost = containerPos.left + this.containerBorder;
-                    newPos = Number.parseInt(leftPos) - this.settings.cube.moveSpeed;
-                    this.style.left = newPos < leftmost ? leftmost : newPos;
+                    this.mover.moveLeft();
                     break;
                 case 39:
                     //RIGHT
-                    let rightmost = containerPos.right - this.width - this.containerBorder;
-                    newPos = Number.parseInt(leftPos) + this.settings.cube.moveSpeed;
-                    this.style.left = newPos > rightmost ? rightmost : newPos;
+                    this.mover.moveRight();
                     break;
                 default:
             }

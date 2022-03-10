@@ -1,5 +1,6 @@
-import setup from './Setup.js';
-
+import { GameManager } from "./GameManager.js";
+export let newGame;
 document.addEventListener("DOMContentLoaded", () => {
-    setup(true);
+    newGame = new GameManager();
+    newGame.setup(true);
 });

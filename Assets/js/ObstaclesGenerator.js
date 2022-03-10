@@ -1,4 +1,4 @@
-import { Obstacle } from "../model/obstacle.js";
+import { OBSTACLE } from "../model/obstacle.js";
 
 export function generateObstacles(settings) {
     let remainingSpace = settings.container.height - settings.obstacles.spaceBetween - 2 * settings.obstacles.minLength;
@@ -12,11 +12,8 @@ export function generateObstacles(settings) {
     let secondObsHeight = settings.container.height - firstObsEnd - settings.obstacles.spaceBetween;
     let secondObsTop = topmost + firstObsEnd + settings.obstacles.spaceBetween - borderWidth;
 
-    let firstObstacle = (new Obstacle(settings, container, styleLeft, firstObsEnd, topmost)).initialize();
-    let secondObstacle = (new Obstacle(settings, container, styleLeft, secondObsHeight, secondObsTop)).initialize();
-
-    container.appendChild(firstObstacle);
-    container.appendChild(secondObstacle);
+    new OBSTACLE(settings, container, styleLeft, firstObsEnd, topmost);
+    new OBSTACLE(settings, container, styleLeft, secondObsHeight, secondObsTop);
 
     function random_0_100() {
         return Math.floor(Math.random() * 101) / 100;
