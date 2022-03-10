@@ -1,13 +1,13 @@
-import { Mover } from "../model/imovable.js";
 import getSettings from './GameSettings.js';
 import { CONTAINER } from '../model/container.js'
 import { CUBE } from "../model/cube.js";
 import { STARTBUTTON } from "../model/StartButton.js";
+import { SCOREBOARD } from "../model/scoreboard.js";
 import { generateObstacles } from "./ObstaclesGenerator.js";
 import { newGame } from "./main.js";
 
-export class GameManager {    
-    setup(firstGame) {
+export class GameManager {
+    setup(firstGame, highscore = 0) {
         while (document.body.firstChild) document.body.removeChild(document.body.firstChild);
         let settings = getSettings();
 
@@ -15,10 +15,7 @@ export class GameManager {
 
         new CUBE(settings);
 
-        let pointSpan = document.createElement('span');
-        pointSpan.id = 'points';
-        pointSpan.innerText = '0 Points';
-        document.body.appendChild(pointSpan);
+        new SCOREBOARD(settings);
 
         let buttonContainer = document.createElement('div');
         buttonContainer.id = 'buttonContainer';
@@ -28,21 +25,18 @@ export class GameManager {
         buttonContainer.style.margin = 0;
         buttonContainer.style.height = settings.container.height;
 
+        //let starter =
         new STARTBUTTON(settings, buttonContainer);
 
         document.getElementById(settings.container.id).appendChild(buttonContainer);
         //let starter = document.getElementById('startButton');
-        //if (!firstGame) { starter.start };
+        //if (!firstGame) { ()=>starter.start(); };
         if (!firstGame) { startButton.click() };//JS magic
     }
     startGame(settings, cube, container, scoreboard, buttonContainer, startButton) {
         //let cycles = 0;
-        let leftmost = container.getBoundingClientRect().left + 1;
-
-        let pointsCounter = 0;
 
         document.onkeydown = checkKey;
-
         generateObstacles(settings);
         requestAnimationFrame(moveObstacles);
 
@@ -59,7 +53,7 @@ export class GameManager {
                     newGame.endGame(buttonContainer, startButton);
                     continueGame = false;
                 }
-                if (Number.parseInt(obstacle.style.left) <= leftmost - 1) {
+                if (Number.parseInt(obstacle.style.left) <= container.getBoundingClientRect().left) {
                     //can't delete obstacles during for cycle, has to put it into a secondary list
                     obsDeleteList.push(obstacle);
                 }
@@ -71,10 +65,11 @@ export class GameManager {
             }
             if (continueGame) {
                 //cycles++; //todo
-                pointsCounter += 2;//pointsCounter += settings.obstacles.moveSpeed;//todo
-                scoreboard.innerText = `${pointsCounter.toString()} Points`;
-                if (pointsCounter % 300 === 0) { generateObstacles(settings); }//if (cycles % 100 === 0) { generateObstacles(settings); }//todo
-                if (pointsCounter % 300 === 0) { settings.obstacles.moveSpeed += 1 }//if ((cycles / settings.obstacles.moveSpeed) % 200 === 0) { settings.obstacles.moveSpeed += 1 }//todo
+                //pointsCounter += 2;//pointsCounter += settings.obstacles.moveSpeed;//todo
+                //scoreboard.innerText = `${pointsCounter.toString()} Points`;
+                scoreboard.update(2);
+                if (scoreboard.score % 300 === 0) { generateObstacles(settings); }//if (cycles % 100 === 0) { generateObstacles(settings); }//todo
+                if (scoreboard.score % 300 === 0) { settings.obstacles.moveSpeed += 1 }//if ((cycles / settings.obstacles.moveSpeed) % 200 === 0) { settings.obstacles.moveSpeed += 1 }//todo
                 requestAnimationFrame(moveObstacles);
             }
         }

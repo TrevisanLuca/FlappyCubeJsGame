@@ -13,6 +13,9 @@ export default function getSettings() {
             backgroundColor: 'red',
             moveSpeed: 15,
             id: 'myCube'
+        },
+        scoreboard: {
+            id: 'points'
         }
     };
     settings.obstacles = {
