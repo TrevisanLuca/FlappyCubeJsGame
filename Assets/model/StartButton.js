@@ -18,6 +18,8 @@ export const STARTBUTTON = (function () {
             result.style.height = 40;
             result.onclick = this.start;
             result.settings = this.settings;
+            result.start = this.start;
+            result.end = this.end;
             result.obj = this;
             this.buttonContainer.appendChild(result);
         }

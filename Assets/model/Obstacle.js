@@ -11,7 +11,7 @@ export const OBSTACLE = (function () {
             this.top = top;
             this.initialize();
             this.getLimits();
-            this.mover = new Mover(result);
+            this.mover = new Mover(result, settings.obstacles.moveSpeed);
         }
         initialize() {
             result = document.createElement('div');
@@ -39,8 +39,8 @@ export const OBSTACLE = (function () {
             result.limits.leftmost = containerPos.left + this.containerBorder;
             result.limits.rightmost = containerPos.right - this.width - this.containerBorder;
         }
-        move(obstacle) {
-            obstacle.style.left = Number.parseInt(obstacle.style.left) - this.settings.obstacles.moveSpeed;
+        move() {
+            this.mover.moveLeft();
         }
     }
 }())

@@ -13,7 +13,7 @@ export class GameManager {
 
         new CONTAINER(settings.container);
 
-        new Mover(new CUBE(settings));
+        new CUBE(settings);
 
         let pointSpan = document.createElement('span');
         pointSpan.id = 'points';
@@ -31,7 +31,8 @@ export class GameManager {
         new STARTBUTTON(settings, buttonContainer);
 
         document.getElementById(settings.container.id).appendChild(buttonContainer);
-
+        //let starter = document.getElementById('startButton');
+        //if (!firstGame) { starter.start };
         if (!firstGame) { startButton.click() };//JS magic
     }
     startGame(settings, cube, container, scoreboard, buttonContainer, startButton) {
@@ -51,7 +52,7 @@ export class GameManager {
             let obsDeleteList = new Array();
             let continueGame = true;
             for (let obstacle of obstaclesList) {
-                obstacle.move
+                obstacle.obj.move();
                 //obstacle.obj.move(obstacle);
                 //obstacle.style.left = Number.parseInt(obstacle.style.left) - 1;//settings.obstacles.width;
                 if (isTouching(obstacle, cube)) {
@@ -95,7 +96,7 @@ export class GameManager {
         buttonContainer.hidden = false;
         startButton.innerText = `You lost!
                              Restart?`;
-        startButton.onclick = startButton.obj.end;
+        startButton.onclick = startButton.end;
         startButton.hidden = false;
     }
 }
